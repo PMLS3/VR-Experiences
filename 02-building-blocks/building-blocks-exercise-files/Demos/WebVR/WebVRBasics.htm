@@ -1,0 +1,176 @@
+ <!doctype html>
+
+<style>
+
+  h1 {
+    color: #000;
+  }
+
+  body{
+    font-family: verdana;
+    background: #fff;
+  }
+
+  label {
+    display: block;
+    color: #000;
+    font-weight: bold;    
+    margin-bottom: 5px;    
+  }
+
+  span {
+    display: block;
+    height: 40px;
+    background: #ccc;
+    width: 250px;
+    font-size: 20px;
+    margin-bottom: 10px; 
+  }
+
+  input {
+    font-size: 24px;
+  }
+
+  div {
+    float: left;
+    margin-right: 50px;
+  }
+
+  #enter-vr {
+    width: 100%;
+  }
+</style>
+
+<body>
+
+  <h1>WebVR API</h1>
+
+  <div id="info">
+
+    <label>vrDisplay.displayId</label>
+    <span id="displayId"></span>
+
+    <label>vrDisplay.displayName</label>
+    <span id="displayName"></span>
+
+    <label>vrDisplay.isConnected</label>
+    <span id="isConnected"></span>
+
+    <label>vrDisplay.isPresenting</label>
+    <span id="isPresenting"></span>
+
+    <label>vrDisplay.depthFar</label>
+    <span id="depthFar"></span>
+
+    <label>vrDisplay.depthNear</label>
+    <span id="depthNear"></span>
+
+  </div>
+
+  <div> 
+
+    <label>vrDisplay.capabilities.canPresent</label>
+    <span id="canPresent"></span>
+
+    <label>vrDisplay.capabilities.hasExternalDisplay</label>
+    <span id="hasExternalDisplay"></span>
+
+    <label>vrDisplay.capabilities.hasOrientation</label>
+    <span id="hasOrientation"></span>
+
+    <label>vrDisplay.capabilities.hasPosition</label>
+    <span id="hasPosition"></span>
+
+    <label>vrDisplay.capabilities.maxLayers</label>
+    <span id="maxLayers"></span>
+
+  </div>
+
+  <div>
+    
+    <label>leftEye.renderHeight</label>
+    <span id="renderHeight"></span>
+
+    <label>leftEye.renderWidth</label>
+    <span id="renderWidth"></span>
+
+  </div>
+
+  <div>
+    <label>timestamp</label>
+    <span id="timestamp"></span> 
+
+    <label>leftProjectionMatrix</label>
+    <span id="leftProjectionMatrix"></span>
+
+    <label>leftViewMatrix</label>
+    <span id="leftViewMatrix"></span> 
+  </div>
+
+  <div id="enter-vr">
+    <input id="entervr" type="button" value="Enter VR!"></input>
+    <canvas id="webglcanvas" height="10"></canvas>
+  </div>
+  
+  <script>
+
+  var vrDisplay;
+  var enterVRBtn = document.querySelector('#entervr');
+
+  function init(){
+
+  navigator.getVRDisplays().then(function (displays) {
+
+    vrDisplay = displays[0];
+    
+    document.getElementById("displayId").innerText = vrDisplay.displayId;
+    document.getElementById("displayName").innerText = vrDisplay.displayName;
+    document.getElementById("isConnected").innerText = vrDisplay.isConnected;
+    document.getElementById("isPresenting").innerText = vrDisplay.isPresenting;
+    document.getElementById("depthFar").innerText = vrDisplay.depthFar;
+    document.getElementById("depthNear").innerText = vrDisplay.depthNear;
+
+    document.getElementById("canPresent").innerText = vrDisplay.capabilities.canPresent;
+    document.getElementById("hasExternalDisplay").innerText = vrDisplay.capabilities.hasExternalDisplay;
+    document.getElementById("hasOrientation").innerText = vrDisplay.capabilities.hasOrientation;
+    document.getElementById("hasPosition").innerText = vrDisplay.capabilities.hasPosition;
+    document.getElementById("maxLayers").innerText = vrDisplay.capabilities.maxLayers;
+
+    var leftEye = vrDisplay.getEyeParameters("left");
+    document.getElementById("renderHeight").innerText = leftEye.renderHeight;
+    document.getElementById("renderWidth").innerText = leftEye.renderWidth;
+            
+    vrDisplay.requestAnimationFrame(onAnimationFrame);     
+ });
+
+ function onAnimationFrame () {
+    var frameData = new VRFrameData();
+    vrDisplay.requestAnimationFrame(onAnimationFrame);
+    vrDisplay.getFrameData(frameData);
+
+    leftProjectionMatrix=frameData.leftProjectionMatrix;
+    leftViewMatrix=frameData.leftViewMatrix;
+    
+    document.getElementById("timestamp").innerText = frameData.timestamp;
+    document.getElementById("leftProjectionMatrix").innerText = leftProjectionMatrix.join();
+    document.getElementById("leftViewMatrix").innerText = leftViewMatrix.join();
+  }
+
+}
+
+enterVRBtn.addEventListener('click', function () {
+  var webglCanvas = document.querySelector('#webglcanvas');
+  var webGl = webglCanvas.getContext('webgl');
+  var layers=[];
+  layers.push({source: webglCanvas});
+  vrDisplay.requestPresent(layers);
+});
+
+init();
+
+</script>
+
+</body>
+
+
+

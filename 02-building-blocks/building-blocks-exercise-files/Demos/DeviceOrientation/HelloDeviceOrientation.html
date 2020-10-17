@@ -1,0 +1,115 @@
+<!doctype html>
+
+<head>
+<style>
+
+  h1 {
+    color: #000;
+  }
+
+  body{
+    font-family: verdana;
+    background: #fff;
+  }
+
+  label {
+    display: block;
+    color: #000;
+    font-weight: bold;    
+    margin-bottom: 5px; 
+    width: 100%;   
+  }
+
+  span {
+    display: block;
+    height: 40px;
+    background: #ccc;
+    width: 250px;
+    font-size: 20px;
+    margin-bottom: 10px; 
+    width: 100%;   
+  }
+
+  input {
+    font-size: 24px;
+  }
+
+  div {
+    float: left;
+    margin-right: 50px;
+  }
+
+  #enter-vr {
+    width: 100%;
+  }
+</style>
+</head>
+
+<body>
+
+
+
+  <div id="info">
+
+    <h1>Device Orientation</h1>
+
+    </br>
+
+    <label>absolute</label>
+    <span id="absolute"></span>
+
+    <label>alpha (z axis 0 to 360)</label>
+    <span id="alpha"></span>
+
+    <label>beta (x axis -180 to 180)</label>
+    <span id="beta"></span>
+
+    <label>gamma (y axis -90 to 90)</label>
+    <span id="gamma"></span>    
+
+  </div>
+
+
+
+  <div id="info">
+
+    <h1>Device Acceleration</h1>
+    </br>
+
+    <label>acceleration</label>
+    <span id="acceleration"></span>
+
+    <label>accelerationIncludingGravity</label>
+    <span id="accelerationIncludingGravity"></span>
+
+    <label>rotationRate</label>
+    <span id="rotationRate"></span>
+
+    <label>interval</label>
+    <span id="interval"></span>    
+
+  </div>
+
+
+
+    <script>
+        window.addEventListener("deviceorientation", handleOrientation, true);
+        
+        function handleOrientation(event) {
+            document.getElementById("absolute").innerText = event.absolute;
+            document.getElementById("alpha").innerText = event.alpha;
+            document.getElementById("beta").innerText = event.beta;
+            document.getElementById("gamma").innerText = event.gamma;
+         }
+
+         window.addEventListener("devicemotion", handleMotion, true);
+
+         function handleMotion(event) {
+             document.getElementById("acceleration").innerText =  event.acceleration.x + " " + event.acceleration.y  + " " + event.acceleration.z;
+             document.getElementById("accelerationIncludingGravity").innerText =  event.accelerationIncludingGravity.x + " " + event.accelerationIncludingGravity.y + " " + event.accelerationIncludingGravity.z;
+             document.getElementById("rotationRate").innerText =  event.rotationRate.alpha + " " + event.rotationRate.beta + " " + event.rotationRate.gamma;
+             document.getElementById("interval").innerText =  event.interval;             
+        }
+    </script>
+</body>
+

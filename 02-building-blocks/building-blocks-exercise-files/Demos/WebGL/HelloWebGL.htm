@@ -1,0 +1,11 @@
+<!doctype html>
+<body>
+    <canvas id="canvas"></canvas>
+</body>
+
+<script>
+    var canvas = document.getElementById('canvas');
+    var webGl = canvas.getContext('webgl');
+    webGl.clearColor(0.9,0.0,0.0,1);
+    webGl.clear(webGl.COLOR_BUFFER_BIT);
+</script>
